@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "181507815314",
+    "project_id": "acagym-863fb",
+    "storage_bucket": "acagym-863fb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:181507815314:android:b9d98674fc72384fbf334b",
+        "android_client_info": {
+          "package_name": "com.example.acagym_project"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAEe8zGx2L-Hy5ULl8OObRDvdxQj2kSZ1o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
