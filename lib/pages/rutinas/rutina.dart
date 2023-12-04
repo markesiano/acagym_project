@@ -96,7 +96,7 @@ class _RutinaPageState extends State<RutinaPage> {
                   itemBuilder: (context, index) => Container(
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
-                        color: Colors.blue[200],
+                        color: Colors.grey[200],
                         borderRadius: BorderRadius.circular(50),
                       ),
                       child: Column(
@@ -127,7 +127,7 @@ class _RutinaPageState extends State<RutinaPage> {
                                     Container(
                                       padding: EdgeInsets.all(10),
                                       decoration: BoxDecoration(
-                                        color: Colors.blue[100],
+                                        color: Colors.grey[100],
                                         borderRadius: BorderRadius.circular(20),
                                       ),
                                       child: Text(
@@ -149,7 +149,7 @@ class _RutinaPageState extends State<RutinaPage> {
                                     Container(
                                       padding: EdgeInsets.all(10),
                                       decoration: BoxDecoration(
-                                        color: Colors.blue[100],
+                                        color: Colors.grey[100],
                                         borderRadius: BorderRadius.circular(20),
                                       ),
                                       child: Text(
@@ -171,7 +171,7 @@ class _RutinaPageState extends State<RutinaPage> {
                                     Container(
                                       padding: EdgeInsets.all(10),
                                       decoration: BoxDecoration(
-                                        color: Colors.blue[100],
+                                        color: Colors.grey[100],
                                         borderRadius: BorderRadius.circular(20),
                                       ),
                                       child: (value
@@ -224,7 +224,7 @@ class _RutinaPageState extends State<RutinaPage> {
                                         padding: EdgeInsets.only(
                                             top: 15, left: 10, right: 10),
                                         decoration: BoxDecoration(
-                                          color: Colors.blue[100],
+                                          color: Colors.grey[100],
                                           borderRadius:
                                               BorderRadius.circular(20),
                                         ),
@@ -286,7 +286,7 @@ class _RutinaPageState extends State<RutinaPage> {
                                           Container(
                                             padding: EdgeInsets.all(10),
                                             decoration: BoxDecoration(
-                                              color: Colors.blue[100],
+                                              color: Colors.grey[100],
                                               borderRadius:
                                                   BorderRadius.circular(20),
                                             ),

@@ -117,7 +117,7 @@ class _RutinasQrState extends State<RutinasQr> {
                           padding: EdgeInsets.all(20),
                           width: 210,
                           decoration: BoxDecoration(
-                            color: Colors.blue[200],
+                            color: Colors.grey[200],
                             borderRadius: BorderRadius.circular(20),
                           ),
                           child: Column(
@@ -153,7 +153,7 @@ class _RutinasQrState extends State<RutinasQr> {
                                         return Container(
                                           padding: EdgeInsets.all(10),
                                           decoration: BoxDecoration(
-                                            color: Colors.blue[100],
+                                            color: Colors.grey[100],
                                             borderRadius:
                                                 BorderRadius.circular(20),
                                           ),
