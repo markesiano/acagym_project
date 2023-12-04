@@ -12,7 +12,7 @@ class _MyHeader extends State<MyHeader> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.grey[350],
+      color: Colors.grey[200],
       width: double.infinity,
       height: 200,
       padding: EdgeInsets.only(top: 20),
@@ -25,7 +25,8 @@ class _MyHeader extends State<MyHeader> {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 image: DecorationImage(
-                  image: AssetImage('assets/images/icons/facebook.png'),
+                  scale: 0.3,
+                  image: AssetImage('assets/images/icons/AcaGYMIcon.jpeg'),
                 ),
               )),
           Text("ACA GYM",

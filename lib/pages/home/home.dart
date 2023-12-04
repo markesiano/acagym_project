@@ -1,3 +1,4 @@
+import 'package:acagym_project/pages/home/agregar_gimnasio.dart';
 import 'package:acagym_project/pages/home/contactos.dart';
 import 'package:acagym_project/pages/home/drawer_header.dart';
 import 'package:acagym_project/pages/home/mapa.dart';
@@ -9,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:latlong2/latlong.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({super.key});
@@ -20,21 +22,28 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
+  LatLng? miPosition;
 
   var currentPage = MenuOption.perfil;
   var paginaLabel = "Tus rutinas";
   List<String> paginas = [
     "Tus rutinas",
     "QR",
-    "Mapa",
+    "Mapa de gimnasios",
   ];
+
+  void updatePosition(LatLng newPosition) {
+    miPosition = newPosition;
+  }
 
   @override
   Widget build(BuildContext context) {
     final List<Widget> _pages = [
       RutinasPage(),
       QrPage(),
-      MapaPage(),
+      MapaPage(
+        onPositionChanged: updatePosition,
+      ),
     ];
     return Scaffold(
       appBar: appBar(),
@@ -101,6 +110,21 @@ class _HomePageState extends State<HomePage> {
                   ),
                 );
               }
+              if (paginaLabel == "Mapa de gimnasios") {
+                // Se convierten los datos de la posición actual a double para poder enviarlos a la pantalla de agregar gimnasio
+                double latitude = miPosition!.latitude;
+                double longitude = miPosition!.longitude;
+
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AgregarGimnasio(
+                      latitude: latitude,
+                      longitude: longitude,
+                    ),
+                  ),
+                );
+              }
             },
             child: Container(
               margin: const EdgeInsets.all(10),
@@ -135,8 +159,8 @@ class _HomePageState extends State<HomePage> {
         children: [
           Column(
             children: [
-              menuItem(1, 'Perfil', Icons.person,
-                  currentPage == MenuOption.perfil ? true : false),
+              // menuItem(1, 'Perfil', Icons.person,
+              //     currentPage == MenuOption.perfil ? true : false),
               menuItem(2, 'Cerrar sesión', Icons.logout,
                   currentPage == MenuOption.cerrarSesion ? true : false),
             ],
@@ -151,6 +175,7 @@ class _HomePageState extends State<HomePage> {
   Widget menuItem(int id, String title, IconData icon, bool selected) {
     return Material(
         child: InkWell(
+      splashColor: Colors.grey[100],
       onTap: () {
         if (id == 1) {
           setState(() {
