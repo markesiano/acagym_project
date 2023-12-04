@@ -1,55 +1,52 @@
-import 'package:flutter/material.dart';
+import 'package:acagym_project/models/ejercicios_model.dart';
+import 'package:hive/hive.dart';
+part 'rutinas_model.g.dart';
 
-class RutinasModel {
+@HiveType(typeId: 0)
+class RutinasModel extends HiveObject {
+  @HiveField(0)
+  String id;
+  @HiveField(1)
   String name;
-  String iconPath;
-  Color boxColor;
+  @HiveField(2)
+  List<EjerciciosModel> ejercicios;
 
   RutinasModel({
+    required this.id,
     required this.name,
-    required this.iconPath,
-    required this.boxColor,
+    required this.ejercicios,
   });
 
-  static List<RutinasModel> getCategories() {
-    List<RutinasModel> rutinas = [];
+  static RutinasModel fromJson(Map<String, dynamic> json) => RutinasModel(
+        id: json['id'],
+        name: json['name'],
+        ejercicios: List<EjerciciosModel>.from(
+            json['ejercicios'].map((x) => EjerciciosModel.fromJson(x))),
+      );
 
-    rutinas.add(RutinasModel(
-      name: 'Pierna',
-      iconPath: 'assets/icons/leg.svg',
-      boxColor: const Color(0xffFFD9D9),
-    ));
+  //Método para obtener los ejercicios del modelo ejercios mediante el id de ejercicios
 
-    rutinas.add(RutinasModel(
-      name: 'Brazo',
-      iconPath: 'assets/icons/arm.svg',
-      boxColor: const Color(0xffD9EFFF),
-    ));
+  // static List<RutinasModel> getRutinas() {
+  //   List<RutinasModel> rutinas = [];
 
-    rutinas.add(RutinasModel(
-      name: 'Espalda',
-      iconPath: 'assets/icons/back.svg',
-      boxColor: const Color(0xffD9FFD9),
-    ));
+  //   rutinas.add(RutinasModel(
+  //     id: '1',
+  //     name: 'Rutina de pierna',
+  //     ejercicios: ['ejercicio1', 'ejercicio2'],
+  //   ));
 
-    rutinas.add(RutinasModel(
-      name: 'Abdomen',
-      iconPath: 'assets/icons/abs.svg',
-      boxColor: const Color.fromARGB(255, 255, 246, 217),
-    ));
+  //   rutinas.add(RutinasModel(
+  //     id: '2',
+  //     name: 'Rutina de pecho',
+  //     ejercicios: ['ejercicio3', 'ejercicio4'],
+  //   ));
 
-    rutinas.add(RutinasModel(
-      name: 'Pecho',
-      iconPath: 'assets/icons/chest.svg',
-      boxColor: const Color.fromARGB(255, 255, 232, 217),
-    ));
+  //   rutinas.add(RutinasModel(
+  //     id: '3',
+  //     name: 'Rutina de espalda',
+  //     ejercicios: ['ejercicio3', 'ejercicio1'],
+  //   ));
 
-    rutinas.add(RutinasModel(
-      name: 'Cintura',
-      iconPath: 'assets/icons/waist.svg',
-      boxColor: const Color.fromARGB(255, 244, 217, 255),
-    ));
-
-    return rutinas;
-  }
+  //   return rutinas;
+  // }
 }

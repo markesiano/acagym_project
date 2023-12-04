@@ -40,10 +40,24 @@ dependencies:
   loading_overlay: ^0.3.0
   firebase_auth: ^4.14.0
   rflutter_alert: ^2.0.7
+  google_nav_bar: ^5.0.6
+  provider:
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  cloud_firestore: ^4.13.3
+  mobile_scanner: ^3.5.5
+  qr_flutter: ^4.1.0
+  url_launcher: ^6.2.1
+  fast_contacts: ^3.1.2
+  permission_handler: ^11.1.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+  hive_generator: ^2.0.1
+  build_runner: ^2.4.7
+  
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

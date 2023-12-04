@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:acagym_project/components/components.dart';
 import 'package:acagym_project/pages/login/home.dart';
-import 'package:acagym_project/pages/login/login.dart';
+import 'package:acagym_project/pages/home/home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:acagym_project/constants.dart';
 import 'package:loading_overlay/loading_overlay.dart';
@@ -92,61 +91,34 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               ),
                             ),
                           ),
-                          CustomBottomScreen(
-                            textButton: 'Registrarse',
-                            heroTag: 'signup_btn',
-                            question: '¿Ya tienes una cuenta?',
-                            buttonPressed: () async {
-                              FocusManager.instance.primaryFocus?.unfocus();
-                              setState(() {
-                                _saving = true;
-                              });
-                              if (_confirmPass == _password) {
+                          Hero(
+                            tag: 'signup_btn',
+                            child: CustomButton(
+                              buttonText: 'Registrarse',
+                              onPressed: () async {
+                                setState(() {
+                                  _saving = true;
+                                });
                                 try {
-                                  await _auth.createUserWithEmailAndPassword(
-                                      email: _email, password: _password);
-
-                                  if (context.mounted) {
-                                    signUpAlert(
-                                      context: context,
-                                      title: '¡Registro exitoso!',
-                                      desc: 'Ve a iniciar sesión',
-                                      btnText: 'Iniciar Sesión',
-                                      onPressed: () {
-                                        setState(() {
-                                          _saving = false;
-                                          Navigator.popAndPushNamed(
-                                              context, SignUpScreen.id);
-                                        });
-                                        Navigator.pushNamed(
-                                            context, LoginScreen.id);
-                                      },
-                                    ).show();
+                                  if (_password == _confirmPass) {
+                                    final newUser = await _auth
+                                        .createUserWithEmailAndPassword(
+                                            email: _email, password: _password);
+                                    if (newUser.user != null) {
+                                      Navigator.pushNamed(context, HomePage.id);
+                                    }
                                   }
+                                  setState(() {
+                                    _saving = false;
+                                  });
                                 } catch (e) {
-                                  signUpAlert(
-                                      context: context,
-                                      onPressed: () {
-                                        SystemNavigator.pop();
-                                      },
-                                      title: '¡Algo salió mal!',
-                                      desc: 'Reinicia la aplicación',
-                                      btnText: 'Cerrar');
+                                  print(e);
+                                  setState(() {
+                                    _saving = false;
+                                  });
                                 }
-                              } else {
-                                showAlert(
-                                    context: context,
-                                    title: 'Contraseña mal escrita',
-                                    desc:
-                                        'Asegurate que ambas contraseñas sean iguales',
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    }).show();
-                              }
-                            },
-                            questionPressed: () async {
-                              Navigator.pushNamed(context, LoginScreen.id);
-                            },
+                              },
+                            ),
                           ),
                         ],
                       ),
