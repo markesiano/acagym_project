@@ -1,19 +1,20 @@
+import 'package:acagym_project/models/qr_modeL.dart';
 import 'package:acagym_project/pages/home/agregar_gimnasio.dart';
 import 'package:acagym_project/pages/home/contactos.dart';
 import 'package:acagym_project/pages/home/drawer_header.dart';
 import 'package:acagym_project/pages/home/mapa.dart';
 import 'package:acagym_project/pages/home/qr.dart';
 import 'package:acagym_project/pages/home/rutinas.dart';
-import 'package:acagym_project/pages/login/home.dart';
 import 'package:acagym_project/pages/rutinas/listaRutinas.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({super.key});
+  const HomePage({super.key});
   static String id = 'homepage_screen';
 
   @override
@@ -23,6 +24,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
   LatLng? miPosition;
+  bool? isScanning = false;
 
   var currentPage = MenuOption.perfil;
   var paginaLabel = "Tus rutinas";
@@ -36,53 +38,59 @@ class _HomePageState extends State<HomePage> {
     miPosition = newPosition;
   }
 
+  void updateIsScanning(bool newIsScanning) {
+    isScanning = newIsScanning;
+  }
+
   @override
   Widget build(BuildContext context) {
     final List<Widget> _pages = [
-      RutinasPage(),
+      const RutinasPage(),
       QrPage(),
       MapaPage(
         onPositionChanged: updatePosition,
       ),
     ];
-    return Scaffold(
-      appBar: appBar(),
-      backgroundColor: Colors.white,
-      body: _pages[_selectedIndex],
-      drawer: Drawer(
-        child: SingleChildScrollView(
-          child: Container(
-            child: Column(
-              children: [
-                MyHeader(),
-                drawerList(),
-              ],
+    return Consumer<QrModel>(
+      builder: (context, value, child) => Scaffold(
+        appBar: appBar(),
+        backgroundColor: Colors.white,
+        body: _pages[_selectedIndex],
+        drawer: Drawer(
+          child: SingleChildScrollView(
+            child: Container(
+              child: Column(
+                children: [
+                  MyHeader(),
+                  drawerList(),
+                ],
+              ),
             ),
           ),
         ),
-      ),
-      bottomNavigationBar: Container(
-        color: Colors.white,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-          child: GNav(
-            backgroundColor: Colors.white,
-            color: Colors.black,
-            activeColor: Colors.black,
-            tabBackgroundColor: Colors.grey.shade300,
-            padding: EdgeInsets.all(15),
-            gap: 8,
-            onTabChange: (index) {
-              setState(() {
-                _selectedIndex = index;
-                paginaLabel = paginas[index];
-              });
-            },
-            tabs: [
-              GButton(icon: Icons.fitness_center, text: 'Rutinas'),
-              GButton(icon: Icons.qr_code, text: 'QR'),
-              GButton(icon: Icons.map, text: 'Mapa'),
-            ],
+        bottomNavigationBar: Container(
+          color: Colors.white,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+            child: GNav(
+              backgroundColor: Colors.white,
+              color: Colors.black,
+              activeColor: Colors.black,
+              tabBackgroundColor: Colors.grey.shade300,
+              padding: const EdgeInsets.all(15),
+              gap: 8,
+              onTabChange: (index) {
+                setState(() {
+                  _selectedIndex = index;
+                  paginaLabel = paginas[index];
+                });
+              },
+              tabs: const [
+                GButton(icon: Icons.fitness_center, text: 'Rutinas'),
+                GButton(icon: Icons.qr_code, text: 'QR'),
+                GButton(icon: Icons.map, text: 'Mapa'),
+              ],
+            ),
           ),
         ),
       ),
@@ -93,7 +101,7 @@ class _HomePageState extends State<HomePage> {
     return AppBar(
       title: Text(
         paginaLabel,
-        style: TextStyle(
+        style: const TextStyle(
             color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
       ),
       centerTitle: true,
@@ -106,7 +114,7 @@ class _HomePageState extends State<HomePage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ListaRutinas(),
+                    builder: (context) => const ListaRutinas(),
                   ),
                 );
               }
@@ -130,6 +138,9 @@ class _HomePageState extends State<HomePage> {
               margin: const EdgeInsets.all(10),
               alignment: Alignment.center,
               width: 40,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.transparent),
               child: (paginaLabel == "Tus rutinas")
                   ? SvgPicture.asset(
                       'assets/icons/add-square-svgrepo-com.svg',
@@ -143,9 +154,6 @@ class _HomePageState extends State<HomePage> {
                           height: 30,
                           width: 30,
                         ),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.transparent),
             )),
       ],
     );
@@ -153,7 +161,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget drawerList() {
     return Container(
-      padding: EdgeInsets.only(top: 15),
+      padding: const EdgeInsets.only(top: 15),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -183,7 +191,6 @@ class _HomePageState extends State<HomePage> {
           });
         } else if (id == 2) {
           FirebaseAuth.instance.signOut();
-          Navigator.pushNamed(context, HomeScreen.id);
         } else if (id == 3) {
           setState(() {
             currentPage = MenuOption.invitar;
@@ -191,13 +198,13 @@ class _HomePageState extends State<HomePage> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => Contactos(),
+              builder: (context) => const Contactos(),
             ),
           );
         }
       },
       child: Padding(
-        padding: EdgeInsets.all(15.0),
+        padding: const EdgeInsets.all(15.0),
         child: Row(
           children: [
             Expanded(
@@ -211,7 +218,7 @@ class _HomePageState extends State<HomePage> {
               flex: 3,
               child: Text(
                 title,
-                style: TextStyle(fontSize: 20, color: Colors.black),
+                style: const TextStyle(fontSize: 20, color: Colors.black),
               ),
             ),
           ],

@@ -1,8 +1,8 @@
+import 'package:acagym_project/models/qr_modeL.dart';
 import 'package:acagym_project/pages/rutinas/rutinasQr.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
-
-const bgColor = Color(0xfffafafa);
+import 'package:provider/provider.dart';
 
 class QrPage extends StatefulWidget {
   const QrPage({super.key});
@@ -12,24 +12,23 @@ class QrPage extends StatefulWidget {
 }
 
 class _QrPageState extends State<QrPage> {
-  bool isScanCompleted = false;
-  bool isFrontCamera = false;
-
-  void closeScanner() {
-    isScanCompleted = false;
-  }
+  bool _isScanning = false;
 
   @override
   Widget build(BuildContext context) {
+    _isScanning = context.watch<QrModel>().isScanning;
+    print(
+        'Este es el valor de isScanning en la pantalla de QR: ${context.watch<QrModel>().isScanning}');
     return Container(
-      color: bgColor,
+      color: Colors.white,
       width: double.infinity,
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       child: Column(
         children: [
           Expanded(
               child: Container(
-            child: Column(
+            color: Colors.white,
+            child: const Column(
               children: [
                 Text(
                   'Escanea el código QR del gimnasio para poder acceder a las rutinas',
@@ -44,14 +43,19 @@ class _QrPageState extends State<QrPage> {
                 ),
               ],
             ),
-            color: bgColor,
           )),
           Expanded(
               flex: 4,
               child: Container(
+                padding: const EdgeInsets.all(20),
+                height: double.infinity,
+                width: double.infinity,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
                   color: Colors.black,
+                  border: Border.all(
+                    color: Colors.white.withOpacity(0.2),
+                  ),
                 ),
                 child: MobileScanner(
                   controller: MobileScannerController(
@@ -70,7 +74,7 @@ class _QrPageState extends State<QrPage> {
 
                     if (!regex.hasMatch(code)) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
+                        const SnackBar(
                           duration: Duration(milliseconds: 500),
                           content: Text(
                             'El código QR no es válido',
@@ -82,15 +86,23 @@ class _QrPageState extends State<QrPage> {
                           backgroundColor: Colors.red,
                         ),
                       );
-                    } else if (!isScanCompleted) {
-                      isScanCompleted = true;
-
+                    } else if (!_isScanning) {
+                      context.read<QrModel>().isScanning = true;
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => RutinasQr(
-                            code: code,
-                            closeScreen: closeScanner,
+                          builder: (context) => PopScope(
+                            canPop: true,
+                            onPopInvoked: (bool didPop) {
+                              if (didPop) {
+                                MaterialPageRoute(
+                                  builder: (context) => const QrPage(),
+                                );
+                              }
+                            },
+                            child: RutinasQr(
+                              code: code,
+                            ),
                           ),
                         ),
                       );
@@ -100,7 +112,7 @@ class _QrPageState extends State<QrPage> {
               )),
           Expanded(
               child: Container(
-            color: bgColor,
+            color: Colors.white,
           )),
         ],
       ),

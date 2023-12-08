@@ -1,24 +1,33 @@
+import 'package:flutter/material.dart';
 import 'package:acagym_project/models/rutinas_model.dart';
 import 'package:hive/hive.dart';
 
-class HiveDatabase {
-  const HiveDatabase();
+class HiveDatabase extends ChangeNotifier {
+  List<RutinasModel>? rutinasListHive = [];
+  Box? boxDB;
 
-  //Función para guardar una rutina de la base de datos de Firebase a Hive
-  Future<int> saveRutina(RutinasModel rutina) async {
-    final Box<RutinasModel> box = await Hive.openBox<RutinasModel>('rutinas');
-    return box.add(rutina);
+  HiveDatabase() {
+    getRutinas();
   }
 
-  //Función para enlistar las rutinas guardadas en Hive
-  Future<List<RutinasModel>> get rutinas async {
-    final Box<RutinasModel> box = await Hive.openBox<RutinasModel>('rutinas');
-    return box.values.toList();
+  void getRutinas() async {
+    boxDB = await Hive.openBox('rutinas');
+    rutinasListHive = boxDB?.values.toList().cast<RutinasModel>();
+    notifyListeners();
   }
 
-  Future<void> deleteRutina(int index) async {
-    final Box<RutinasModel> box = await Hive.openBox<RutinasModel>('rutinas');
-    await box.deleteAt(index);
+  List<RutinasModel> get rutinas => rutinasListHive!;
+
+  void addRutina(RutinasModel rutina) async {
+    await boxDB?.add(rutina);
+    rutinasListHive = boxDB?.values.toList().cast<RutinasModel>();
+    notifyListeners();
+  }
+
+  void deleteRutina(int index) async {
+    await boxDB?.deleteAt(index);
+    rutinasListHive = boxDB?.values.toList().cast<RutinasModel>();
+    notifyListeners();
   }
 
   // // Referencia de "hive box"

@@ -22,7 +22,7 @@ class RutinaPage extends StatefulWidget {
 }
 
 class _RutinaPageState extends State<RutinaPage> {
-  final HiveDatabase hiveData = const HiveDatabase();
+  final HiveDatabase hiveData = HiveDatabase();
 
   @override
   Widget build(BuildContext context) {
@@ -36,13 +36,11 @@ class _RutinaPageState extends State<RutinaPage> {
                       IconButton(
                         onPressed: () {
                           hiveData
-                              .saveRutina(value.getRutinaById(widget.idRutina));
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => HomePage()));
+                              .addRutina(value.getRutinaById(widget.idRutina));
+                          Navigator.pop(context);
+                          Navigator.pop(context);
                         },
-                        icon: Icon(Icons.add_circle_outline_outlined),
+                        icon: const Icon(Icons.add_circle_outline_outlined),
                       ),
                     ]
                   : [
@@ -51,24 +49,24 @@ class _RutinaPageState extends State<RutinaPage> {
                           // Preguntar si realmente quiere eliminar
 
                           AlertDialog alert = AlertDialog(
-                            title: Text("Eliminar rutina"),
-                            content: Text(
+                            title: const Text("Eliminar rutina"),
+                            content: const Text(
                                 "¿Estás seguro que quieres eliminar esta rutina?"),
                             actions: [
                               TextButton(
-                                child: Text("Cancelar"),
+                                child: const Text("Cancelar"),
                                 onPressed: () {
                                   Navigator.of(context).pop();
                                 },
                               ),
                               TextButton(
-                                child: Text("Eliminar"),
+                                child: const Text("Eliminar"),
                                 onPressed: () {
                                   hiveData.deleteRutina(widget.numIndex);
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => HomePage()));
+                                  // Si se completa, se elimina el ejercicio y se vuelve a la pantalla anterior
+
+                                  Navigator.pop(context);
+                                  Navigator.pop(context);
                                 },
                               ),
                             ],
@@ -81,28 +79,31 @@ class _RutinaPageState extends State<RutinaPage> {
                             },
                           );
                         },
-                        icon: Icon(Icons.delete),
+                        icon: const Icon(Icons.delete),
                       ),
                     ],
             ),
             body: Container(
               child: Container(
-                padding: EdgeInsets.only(left: 10, right: 10, bottom: 20),
+                padding: const EdgeInsets.only(left: 10, right: 10, bottom: 20),
                 child: ListView.separated(
                   itemCount: value.getEjerciciosCount(widget.idRutina),
-                  separatorBuilder: (context, index) => SizedBox(
+                  separatorBuilder: (context, index) => const SizedBox(
                     height: 20,
                   ),
                   itemBuilder: (context, index) => Container(
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
-                        color: Colors.grey[200],
+                        color: Colors.grey[50],
                         borderRadius: BorderRadius.circular(50),
+                        border: Border.all(
+                          color: Colors.black.withOpacity(0.4),
+                        ),
                       ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          SizedBox(
+                          const SizedBox(
                             height: 15,
                           ),
                           Text(
@@ -110,10 +111,10 @@ class _RutinaPageState extends State<RutinaPage> {
                                 .getRutinaById(widget.idRutina)
                                 .ejercicios[index]
                                 .name,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.bold),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           Row(
@@ -125,54 +126,53 @@ class _RutinaPageState extends State<RutinaPage> {
                                       MainAxisAlignment.spaceEvenly,
                                   children: [
                                     Container(
-                                      padding: EdgeInsets.all(10),
+                                      padding: const EdgeInsets.all(10),
                                       decoration: BoxDecoration(
                                         color: Colors.grey[100],
                                         borderRadius: BorderRadius.circular(20),
+                                        border: Border.all(
+                                          color: Colors.black.withOpacity(0.2),
+                                        ),
                                       ),
                                       child: Text(
-                                        'Series: ' +
-                                            value
-                                                .getRutinaById(widget.idRutina)
-                                                .ejercicios[index]
-                                                .series
-                                                .toString(),
-                                        style: TextStyle(
+                                        'Series: ${value.getRutinaById(widget.idRutina).ejercicios[index].series}',
+                                        style: const TextStyle(
                                             color: Colors.black,
                                             fontSize: 14,
                                             fontWeight: FontWeight.w400),
                                       ),
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       width: 10,
                                     ),
                                     Container(
-                                      padding: EdgeInsets.all(10),
+                                      padding: const EdgeInsets.all(10),
                                       decoration: BoxDecoration(
                                         color: Colors.grey[100],
                                         borderRadius: BorderRadius.circular(20),
+                                        border: Border.all(
+                                          color: Colors.black.withOpacity(0.2),
+                                        ),
                                       ),
                                       child: Text(
-                                        'Repeticiones: ' +
-                                            value
-                                                .getRutinaById(widget.idRutina)
-                                                .ejercicios[index]
-                                                .repeticiones
-                                                .toString(),
-                                        style: TextStyle(
+                                        'Repeticiones: ${value.getRutinaById(widget.idRutina).ejercicios[index].repeticiones}',
+                                        style: const TextStyle(
                                             color: Colors.black,
                                             fontSize: 14,
                                             fontWeight: FontWeight.w400),
                                       ),
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       width: 10,
                                     ),
                                     Container(
-                                      padding: EdgeInsets.all(10),
+                                      padding: const EdgeInsets.all(10),
                                       decoration: BoxDecoration(
                                         color: Colors.grey[100],
                                         borderRadius: BorderRadius.circular(20),
+                                        border: Border.all(
+                                          color: Colors.black.withOpacity(0.2),
+                                        ),
                                       ),
                                       child: (value
                                                   .getRutinaById(
@@ -181,33 +181,26 @@ class _RutinaPageState extends State<RutinaPage> {
                                                   .peso !=
                                               null)
                                           ? Text(
-                                              'Peso: ' +
-                                                  value
-                                                      .getRutinaById(
-                                                          widget.idRutina)
-                                                      .ejercicios[index]
-                                                      .peso
-                                                      .toString() +
-                                                  'Kg',
-                                              style: TextStyle(
+                                              'Peso: ${value.getRutinaById(widget.idRutina).ejercicios[index].peso}Kg',
+                                              style: const TextStyle(
                                                   color: Colors.black,
                                                   fontSize: 14,
                                                   fontWeight: FontWeight.w400),
                                             )
-                                          : SizedBox(
+                                          : const SizedBox(
                                               width: 10,
                                             ),
                                     ),
                                   ],
                                 ))
                               ]),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
-                          Text('Músculos',
+                          const Text('Músculos',
                               style: TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.bold)),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           Container(
@@ -221,19 +214,23 @@ class _RutinaPageState extends State<RutinaPage> {
                                     shrinkWrap: true,
                                     itemBuilder: (context, index2) {
                                       return Container(
-                                        padding: EdgeInsets.only(
+                                        padding: const EdgeInsets.only(
                                             top: 15, left: 10, right: 10),
                                         decoration: BoxDecoration(
                                           color: Colors.grey[100],
                                           borderRadius:
                                               BorderRadius.circular(20),
+                                          border: Border.all(
+                                            color:
+                                                Colors.black.withOpacity(0.2),
+                                          ),
                                         ),
                                         child: Text(
                                           value
                                               .getRutinaById(widget.idRutina)
                                               .ejercicios[index]
                                               .musculos[index2],
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                               color: Colors.black,
                                               fontSize: 14,
                                               fontWeight: FontWeight.w400),
@@ -241,7 +238,7 @@ class _RutinaPageState extends State<RutinaPage> {
                                       );
                                     },
                                     separatorBuilder: (context, index) =>
-                                        SizedBox(
+                                        const SizedBox(
                                       width: 10,
                                     ),
                                     itemCount: value
@@ -252,7 +249,7 @@ class _RutinaPageState extends State<RutinaPage> {
                                   ),
                                 ],
                               )),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           (value
@@ -260,14 +257,14 @@ class _RutinaPageState extends State<RutinaPage> {
                                       .ejercicios[index]
                                       .maquina !=
                                   null)
-                              ? Text('Máquina',
+                              ? const Text('Máquina',
                                   style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold))
-                              : SizedBox(
+                              : const SizedBox(
                                   width: 10,
                                 ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           (value
@@ -284,11 +281,15 @@ class _RutinaPageState extends State<RutinaPage> {
                                             MainAxisAlignment.center,
                                         children: [
                                           Container(
-                                            padding: EdgeInsets.all(10),
+                                            padding: const EdgeInsets.all(10),
                                             decoration: BoxDecoration(
                                               color: Colors.grey[100],
                                               borderRadius:
                                                   BorderRadius.circular(20),
+                                              border: Border.all(
+                                                color: Colors.black
+                                                    .withOpacity(0.2),
+                                              ),
                                             ),
                                             child: Text(
                                               value
@@ -297,7 +298,7 @@ class _RutinaPageState extends State<RutinaPage> {
                                                   .ejercicios[index]
                                                   .maquina!
                                                   .name,
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                   color: Colors.black,
                                                   fontSize: 14,
                                                   fontWeight: FontWeight.w400),
@@ -305,18 +306,33 @@ class _RutinaPageState extends State<RutinaPage> {
                                           ),
                                         ],
                                       ),
-                                      Image(
-                                        image: AssetImage(value
-                                            .getRutinaById(widget.idRutina)
-                                            .ejercicios[index]
-                                            .maquina!
-                                            .image),
-                                        width: 200,
-                                        height: 200,
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Container(
+                                          width: 200,
+                                          height: 200,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                            border: Border.all(
+                                              color:
+                                                  Colors.black.withOpacity(0.2),
+                                            ),
+                                          ),
+                                          child: Image(
+                                            image: AssetImage(value
+                                                .getRutinaById(widget.idRutina)
+                                                .ejercicios[index]
+                                                .maquina!
+                                                .image),
+                                            width: 200,
+                                            height: 200,
+                                          ),
+                                        ),
                                       ),
                                     ],
                                   ))
-                              : SizedBox(
+                              : const SizedBox(
                                   width: 10,
                                 ),
                         ],

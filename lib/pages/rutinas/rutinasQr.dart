@@ -1,16 +1,16 @@
 import 'package:acagym_project/data/hive_database.dart';
+import 'package:acagym_project/models/qr_modeL.dart';
 import 'package:acagym_project/models/rutinas_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:acagym_project/pages/rutinas/rutina.dart';
+import 'package:provider/provider.dart';
 
 class RutinasQr extends StatefulWidget {
   final String code;
-  final Function() closeScreen;
   const RutinasQr({
     super.key,
     required this.code,
-    required this.closeScreen,
   });
 
   @override
@@ -18,18 +18,21 @@ class RutinasQr extends StatefulWidget {
 }
 
 class _RutinasQrState extends State<RutinasQr> {
-  final HiveDatabase hiveData = const HiveDatabase();
-  List<RutinasModel> rutinasListHive = [];
+  final HiveDatabase hiveData = HiveDatabase();
+  List<RutinasModel>? rutinasListHive = [];
 
   @override
   void initState() {
-    getRutinas();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<QrModel>().isScanning = false;
+    });
     super.initState();
   }
 
-  Future<void> getRutinas() async {
-    rutinasListHive = await hiveData.rutinas;
-    setState(() {});
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    rutinasListHive = Provider.of<HiveDatabase>(context).rutinas;
   }
 
   Stream<List<RutinasModel>> readRutinas() => FirebaseFirestore.instance
@@ -41,16 +44,18 @@ class _RutinasQrState extends State<RutinasQr> {
 
   @override
   Widget build(BuildContext context) {
-    widget.closeScreen();
+    print(
+        'Este es el valor de isScanning cuando entras a RutinasQR: ${context.watch<QrModel>().isScanning}');
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Rutinas'),
+        title: const Text('Rutinas'),
       ),
       body: StreamBuilder(
         stream: readRutinas(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            return Text('Error');
+            return const Text('Error');
           } else if (snapshot.hasData) {
             final rutinas = snapshot.data as List<RutinasModel>;
 
@@ -60,8 +65,8 @@ class _RutinasQrState extends State<RutinasQr> {
 
             for (int i = 0; i < rutinas.length; i++) {
               bool flag = true;
-              for (int j = 0; j < rutinasListHive.length; j++) {
-                if (rutinas[i].id == rutinasListHive[j].id) {
+              for (int j = 0; j < rutinasListHive!.length; j++) {
+                if (rutinas[i].id == rutinasListHive![j].id) {
                   flag = false;
                 }
               }
@@ -84,8 +89,8 @@ class _RutinasQrState extends State<RutinasQr> {
               }
             }
 
-            if (rutinasMostrar2.length == 0) {
-              return Center(
+            if (rutinasMostrar2.isEmpty) {
+              return const Center(
                 child: Text(
                   'No hay rutinas disponibles',
                   style: TextStyle(
@@ -97,6 +102,7 @@ class _RutinasQrState extends State<RutinasQr> {
             } else {
               return Container(
                 //height: _height * 0.7,
+
                 child: ListView.separated(
                     itemBuilder: (context, index) {
                       return GestureDetector(
@@ -114,11 +120,14 @@ class _RutinasQrState extends State<RutinasQr> {
                           );
                         },
                         child: Container(
-                          padding: EdgeInsets.all(20),
+                          padding: const EdgeInsets.all(20),
                           width: 210,
                           decoration: BoxDecoration(
                             color: Colors.grey[200],
                             borderRadius: BorderRadius.circular(20),
+                            border: Border.all(
+                              color: Colors.black.withOpacity(0.4),
+                            ),
                           ),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -127,22 +136,22 @@ class _RutinasQrState extends State<RutinasQr> {
                                 children: [
                                   Text(
                                     rutinasMostrar2[index].name,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                         color: Colors.black,
                                         fontSize: 16,
                                         fontWeight: FontWeight.w500),
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 10,
                                   ),
-                                  Text(
+                                  const Text(
                                     'Ejercicios',
                                     style: TextStyle(
                                         color: Colors.black,
                                         fontSize: 14,
                                         fontWeight: FontWeight.w400),
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 10,
                                   ),
                                   Container(
@@ -151,11 +160,15 @@ class _RutinasQrState extends State<RutinasQr> {
                                     child: ListView.separated(
                                       itemBuilder: (context, index2) {
                                         return Container(
-                                          padding: EdgeInsets.all(10),
+                                          padding: const EdgeInsets.all(10),
                                           decoration: BoxDecoration(
                                             color: Colors.grey[100],
                                             borderRadius:
                                                 BorderRadius.circular(20),
+                                            border: Border.all(
+                                              color:
+                                                  Colors.black.withOpacity(0.2),
+                                            ),
                                           ),
                                           child: Column(
                                             mainAxisAlignment:
@@ -167,7 +180,7 @@ class _RutinasQrState extends State<RutinasQr> {
                                                     rutinasMostrar2[index]
                                                         .ejercicios[index2]
                                                         .name,
-                                                    style: TextStyle(
+                                                    style: const TextStyle(
                                                         color: Colors.black,
                                                         fontSize: 16,
                                                         fontWeight:
@@ -180,7 +193,7 @@ class _RutinasQrState extends State<RutinasQr> {
                                         );
                                       },
                                       separatorBuilder: (context, index) =>
-                                          SizedBox(
+                                          const SizedBox(
                                         width: 3,
                                       ),
                                       itemCount: rutinasMostrar2[index]
@@ -196,16 +209,17 @@ class _RutinasQrState extends State<RutinasQr> {
                         ),
                       );
                     },
-                    separatorBuilder: (context, index) => SizedBox(
+                    separatorBuilder: (context, index) => const SizedBox(
                           height: 20,
                         ),
                     itemCount: rutinasMostrar2.length,
                     scrollDirection: Axis.vertical,
-                    padding: EdgeInsets.only(left: 20, right: 20, bottom: 20)),
+                    padding:
+                        const EdgeInsets.only(left: 20, right: 20, bottom: 20)),
               );
             }
           } else {
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           }

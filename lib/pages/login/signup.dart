@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:acagym_project/components/components.dart';
-import 'package:acagym_project/pages/login/home.dart';
 import 'package:acagym_project/pages/home/home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:acagym_project/constants.dart';
@@ -25,7 +24,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        Navigator.popAndPushNamed(context, HomeScreen.id);
         return true;
       },
       child: Scaffold(

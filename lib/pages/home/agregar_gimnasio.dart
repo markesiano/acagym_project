@@ -26,25 +26,28 @@ class _AgregarGimnasioState extends State<AgregarGimnasio> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Agregar gimnasio'),
+          title: const Text('Agregar gimnasio'),
         ),
         body: Container(
           padding: EdgeInsets.all(20),
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             color: Colors.white,
           ),
           child: Container(
             height: 300,
-            width: double.infinity,
             decoration: BoxDecoration(
-              color: Colors.blue[200],
+              color: Colors.grey[50],
               borderRadius: BorderRadius.circular(50),
+              border: Border.all(
+                color: Colors.grey[300]!,
+                width: 2,
+              ),
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 // Text centrado para indicar que se agregará el gimnasio donde se encuentra actualmente
-                Text(
+                const Text(
                   'Se eviará solicitud del gimnasio donde se encuentra actualmente',
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
@@ -53,56 +56,81 @@ class _AgregarGimnasioState extends State<AgregarGimnasio> {
                 // Indicamos la latitud y longitud del gimnasio que viene desde HomePage
                 Text(
                     'Latitud: ${widget.latitude} \nLongitud: ${widget.longitude}',
-                    style: TextStyle(fontSize: 15)),
-                SizedBox(height: 20),
+                    style: const TextStyle(fontSize: 15)),
+                const SizedBox(height: 20),
                 // Se agrega un campo de texto para el nombre del gimnasio
                 Container(
                   width: 300,
                   child: TextField(
                     controller: nombreGimnasioController,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(20)),
+                      ),
                       labelText: 'Nombre del gimnasio',
                     ),
                   ),
                 ),
                 // Se agrega el botón para guardar el gimnasio
-                ElevatedButton(
-                  onPressed: () {
-                    // Se agrega el registro a la tabla gimnasiosACAGYM y se verifica que se haya agregado
-                    _firestore
-                        .collection('gimnasiosACAGYM')
-                        .add({
-                          'nombre': nombreGimnasioController.text,
-                          'latitude': widget.latitude,
-                          'longitude': widget.longitude,
-                          'status': false,
-                        })
-                        .then((value) =>
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                duration: Duration(milliseconds: 500),
-                                content: Text('Gimnasio agregado'),
-                                backgroundColor: Colors.green,
-                              ),
-                            ))
-                        .catchError((error) =>
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                duration: Duration(milliseconds: 500),
-                                content: Text('Error al agregar el gimnasio'),
-                                backgroundColor: Colors.red,
-                              ),
-                            ));
+                Padding(
+                  padding: const EdgeInsets.only(top: 20),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green,
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
+                    onPressed: () {
+                      // Se agrega el registro a la tabla gimnasiosACAGYM y se verifica que se haya agregado
 
-                    // Se da un delay
+                      // Comrpobar que esté ingresado el nombre del gimnasio
+                      if (nombreGimnasioController.text.isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            duration: Duration(milliseconds: 750),
+                            content: Text('Ingrese el nombre del gimnasio'),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                      } else {
+                        _firestore
+                            .collection('gimnasiosACAGYM')
+                            .add({
+                              'nombre': nombreGimnasioController.text,
+                              'latitude': widget.latitude,
+                              'longitude': widget.longitude,
+                              'status': false,
+                            })
+                            .then((value) =>
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    duration: Duration(milliseconds: 500),
+                                    content: Text('Gimnasio agregado'),
+                                    backgroundColor: Colors.green,
+                                  ),
+                                ))
+                            .catchError((error) =>
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    duration: Duration(milliseconds: 500),
+                                    content:
+                                        Text('Error al agregar el gimnasio'),
+                                    backgroundColor: Colors.red,
+                                  ),
+                                ));
 
-                    Future.delayed(const Duration(milliseconds: 1000), () {
-                      // Se regresa a la pantalla anterior
-                      Navigator.pop(context);
-                    });
-                  },
-                  child: Text('Guardar'),
+                        // Se da un delay
+
+                        Future.delayed(const Duration(milliseconds: 1000), () {
+                          // Se regresa a la pantalla anterior
+                          Navigator.pop(context);
+                        });
+                      }
+                    },
+                    child: const Text('Guardar'),
+                  ),
                 ),
               ],
             ),

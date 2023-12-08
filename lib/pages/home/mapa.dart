@@ -6,9 +6,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 
-const MAPBOX_ACCESS_TOKEN =
-    "pk.eyJ1IjoibWFya2VzaWFubyIsImEiOiJjbHBxajdvaTEwMHczMmtvN3NoaWhldG1wIn0.ngKJEvlPmY9KYFsOQhh1sg";
-
 class MapaPage extends StatefulWidget {
   final void Function(LatLng) onPositionChanged;
   const MapaPage({super.key, required this.onPositionChanged});
@@ -86,51 +83,57 @@ class _MapaPageState extends State<MapaPage> {
             stream: readLocalizaciones(),
             builder: (context, snapshot) {
               if (snapshot.hasError) {
-                return Text('Error');
+                return const Text('Error');
               } else if (snapshot.hasData) {
                 final localizaciones =
                     snapshot.data as List<LocalizacionesModel>;
 
                 // Escribimos de manera de debbug para ver que se esten obteniendo los datos de la base de datos
 
-                return FlutterMap(
-                  options: MapOptions(
-                    initialCenter: miPosition!,
-                    initialZoom: 18.0,
+                return Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.transparent,
                   ),
-                  children: [
-                    TileLayer(
-                      urlTemplate:
-                          "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                  child: FlutterMap(
+                    options: MapOptions(
+                      initialCenter: miPosition!,
+                      initialZoom: 18.0,
                     ),
-                    MarkerLayer(
-                      markers: [
-                        Marker(
-                          width: 40.0,
-                          height: 40.0,
-                          point: miPosition!,
-                          child: SvgPicture.asset(
-                            'assets/icons/weight-lifter-svgrepo-com.svg',
-                            height: 30,
-                            width: 30,
+                    children: [
+                      TileLayer(
+                        urlTemplate:
+                            "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                      ),
+                      MarkerLayer(
+                        markers: [
+                          Marker(
+                            width: 40.0,
+                            height: 40.0,
+                            point: miPosition!,
+                            child: SvgPicture.asset(
+                              'assets/icons/weight-lifter-svgrepo-com.svg',
+                              height: 30,
+                              width: 30,
+                            ),
                           ),
-                        ),
-                        // Se agregan los marcadores de los gimnasios registrados y se verifica que esten activos
-                        for (int i = 0; i < localizaciones.length; i++)
-                          if (localizaciones[i].status)
-                            Marker(
-                                width: 50.0,
-                                height: 50.0,
-                                point: LatLng(localizaciones[i].latitude,
-                                    localizaciones[i].longitude),
-                                child: SvgPicture.asset(
-                                  'assets/icons/gym-near-svgrepo-com.svg',
-                                  height: 30,
-                                  width: 30,
-                                )),
-                      ],
-                    ),
-                  ],
+                          // Se agregan los marcadores de los gimnasios registrados y se verifica que esten activos
+                          for (int i = 0; i < localizaciones.length; i++)
+                            if (localizaciones[i].status)
+                              Marker(
+                                  width: 50.0,
+                                  height: 50.0,
+                                  point: LatLng(localizaciones[i].latitude,
+                                      localizaciones[i].longitude),
+                                  child: SvgPicture.asset(
+                                    'assets/icons/gym-near-svgrepo-com.svg',
+                                    height: 30,
+                                    width: 30,
+                                  )),
+                        ],
+                      ),
+                    ],
+                  ),
                 );
               } else {
                 return const Center(child: CircularProgressIndicator());

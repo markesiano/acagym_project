@@ -4,22 +4,29 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class RutinaData extends ChangeNotifier {
-  Stream<List<RutinasModel>> readRutinas() => FirebaseFirestore.instance
-      .collection('rutinas')
-      .snapshots()
-      .map((snapshot) => snapshot.docs
-          .map((doc) => RutinasModel.fromJson(doc.data()))
-          .toList());
+  late Stream<List<RutinasModel>> _rutinasStream;
 
   List<RutinasModel> rutinasList = [];
 
-  //Inicializar base de datos desde firestore
   RutinaData() {
-    readRutinas().listen((rutinas) {
+    _initialize();
+  }
+
+  void _initialize() {
+    _rutinasStream = FirebaseFirestore.instance
+        .collection('rutinas')
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+            .map((doc) => RutinasModel.fromJson(doc.data()))
+            .toList());
+
+    _rutinasStream.listen((rutinas) {
       rutinasList = rutinas;
-      notifyListeners();
+      notifyListeners(); // Notifica a los widgets que los datos han cambiado
     });
   }
+
+  List<RutinasModel> get rutinas => rutinasList;
 
   // Buscar en la base de datos todos los registros que coincidan con el qr de la maquina
 

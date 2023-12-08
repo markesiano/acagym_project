@@ -1,18 +1,15 @@
+import 'package:acagym_project/data/hive_database.dart';
 import 'package:acagym_project/data/rutina_data.dart';
-import 'package:acagym_project/models/rutinas_model.dart';
-import 'package:acagym_project/models/maquinas_model.dart';
-import 'package:acagym_project/models/ejercicios_model.dart';
+import 'package:acagym_project/models/qr_modeL.dart';
 
 import 'package:flutter/material.dart';
-import 'package:acagym_project/pages/login/home.dart';
-import 'package:acagym_project/pages/login/login.dart';
-import 'package:acagym_project/pages/login/signup.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:acagym_project/firebase_options.dart';
-import 'package:acagym_project/pages/home/home.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:provider/provider.dart';
-import 'package:acagym_project/pages/rutinas/rutina.dart';
+
+import 'package:acagym_project/models/models.dart';
+import 'package:acagym_project/pages/pages.dart';
 
 Future<void> main() async {
   //Se inicia la instancia de hive
@@ -28,11 +25,28 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  runApp(const MyApp());
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(
+        create: (context) => QrModel(),
+      ),
+      ChangeNotifierProvider(create: (context) => RutinaData()),
+      ChangeNotifierProvider(create: (context) => HiveDatabase()),
+    ],
+    child: MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final _routes = <String, WidgetBuilder>{
+    '/': (context) => const HomePage(),
+    '/signin': (context) => LoginPage(),
+    '/rutina': (context) => const RutinaPage(nombre: '', idRutina: ''),
+    '/listaRutinas': (context) => const ListaRutinas(),
+    '/rutinasQr': (context) => const RutinasQr(code: ''),
+  };
+
+  MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -46,13 +60,11 @@ class MyApp extends StatelessWidget {
               fontFamily: 'Roboto',
             ),
           )),
-          initialRoute: HomeScreen.id,
-          routes: {
-            HomeScreen.id: (context) => HomeScreen(),
-            LoginScreen.id: (context) => LoginScreen(),
-            SignUpScreen.id: (context) => SignUpScreen(),
-            RutinaPage.id: (context) => RutinaPage(nombre: '', idRutina: ''),
-            HomePage.id: (context) => HomePage(),
+          initialRoute: '/signin',
+          routes: _routes,
+          onGenerateRoute: (settings) {
+            return MaterialPageRoute(
+                builder: (context) => const NotFoundPage());
           },
         ));
   }

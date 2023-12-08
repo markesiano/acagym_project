@@ -15,14 +15,8 @@ class _ContactosState extends State<Contactos> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        actions: [
-          // IconButton(
-          //   icon: Icon(Icons.search),
-          //   onPressed: () {},
-          // ),
-        ],
         centerTitle: true,
-        title: Text('Contactos'),
+        title: const Text('Contactos'),
       ),
       body: Container(
         child: FutureBuilder(
@@ -45,7 +39,7 @@ class _ContactosState extends State<Contactos> {
                     .sort((a, b) => a.displayName.compareTo(b.displayName));
 
                 return ListView.separated(
-                  separatorBuilder: (context, index) => SizedBox(
+                  separatorBuilder: (context, index) => const SizedBox(
                     height: 20,
                   ),
                   itemCount: contactos.length,
@@ -72,7 +66,7 @@ class _ContactosState extends State<Contactos> {
                         }
                       },
                       child: ListTile(
-                        leading: CircleAvatar(
+                        leading: const CircleAvatar(
                           child: Icon(Icons.person),
                         ),
                         title: Text(contactos[index].displayName),
@@ -83,7 +77,7 @@ class _ContactosState extends State<Contactos> {
                   },
                 );
               } else {
-                return Center(child: CircularProgressIndicator());
+                return const Center(child: CircularProgressIndicator());
               }
             }),
       ),

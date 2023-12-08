@@ -3,6 +3,7 @@ import 'package:acagym_project/models/rutinas_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:acagym_project/pages/rutinas/rutina.dart';
+import 'package:provider/provider.dart';
 
 class ListaRutinas extends StatefulWidget {
   const ListaRutinas({Key? key}) : super(key: key);
@@ -12,18 +13,13 @@ class ListaRutinas extends StatefulWidget {
 }
 
 class _ListaRutinasState extends State<ListaRutinas> {
-  final HiveDatabase hiveData = const HiveDatabase();
-  List<RutinasModel> rutinasListHive = [];
+  final HiveDatabase hiveData = HiveDatabase();
+  late List<RutinasModel>? rutinasListHive = [];
 
   @override
-  void initState() {
-    getRutinas();
-    super.initState();
-  }
-
-  Future<void> getRutinas() async {
-    rutinasListHive = await hiveData.rutinas;
-    setState(() {});
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    rutinasListHive = Provider.of<HiveDatabase>(context).rutinas;
   }
 
   Stream<List<RutinasModel>> readRutinas() => FirebaseFirestore.instance
@@ -37,13 +33,13 @@ class _ListaRutinasState extends State<ListaRutinas> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Rutinas'),
+        title: const Text('Rutinas'),
       ),
       body: StreamBuilder(
         stream: readRutinas(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            return Text('Error');
+            return const Text('Error');
           } else if (snapshot.hasData) {
             final rutinas = snapshot.data as List<RutinasModel>;
 
@@ -53,8 +49,8 @@ class _ListaRutinasState extends State<ListaRutinas> {
 
             for (int i = 0; i < rutinas.length; i++) {
               bool flag = true;
-              for (int j = 0; j < rutinasListHive.length; j++) {
-                if (rutinas[i].id == rutinasListHive[j].id) {
+              for (int j = 0; j < rutinasListHive!.length; j++) {
+                if (rutinas[i].id == rutinasListHive![j].id) {
                   flag = false;
                 }
               }
@@ -63,8 +59,8 @@ class _ListaRutinasState extends State<ListaRutinas> {
               }
             }
 
-            if (rutinasMostrar.length == 0) {
-              return Center(
+            if (rutinasMostrar.isEmpty) {
+              return const Center(
                 child: Text(
                   'No hay rutinas disponibles',
                   style: TextStyle(
@@ -93,11 +89,14 @@ class _ListaRutinasState extends State<ListaRutinas> {
                           );
                         },
                         child: Container(
-                          padding: EdgeInsets.all(20),
+                          padding: const EdgeInsets.all(20),
                           width: 210,
                           decoration: BoxDecoration(
-                            color: Colors.grey[200],
+                            color: Colors.grey[50],
                             borderRadius: BorderRadius.circular(20),
+                            border: Border.all(
+                              color: Colors.black.withOpacity(0.4),
+                            ),
                           ),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -106,22 +105,22 @@ class _ListaRutinasState extends State<ListaRutinas> {
                                 children: [
                                   Text(
                                     rutinasMostrar[index].name,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                         color: Colors.black,
                                         fontSize: 16,
                                         fontWeight: FontWeight.w500),
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 10,
                                   ),
-                                  Text(
+                                  const Text(
                                     'Ejercicios',
                                     style: TextStyle(
                                         color: Colors.black,
                                         fontSize: 14,
                                         fontWeight: FontWeight.w400),
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 10,
                                   ),
                                   Container(
@@ -130,11 +129,15 @@ class _ListaRutinasState extends State<ListaRutinas> {
                                     child: ListView.separated(
                                       itemBuilder: (context, index2) {
                                         return Container(
-                                          padding: EdgeInsets.all(10),
+                                          padding: const EdgeInsets.all(10),
                                           decoration: BoxDecoration(
                                             color: Colors.grey[100],
                                             borderRadius:
                                                 BorderRadius.circular(20),
+                                            border: Border.all(
+                                              color:
+                                                  Colors.black.withOpacity(0.2),
+                                            ),
                                           ),
                                           child: Column(
                                             mainAxisAlignment:
@@ -146,7 +149,7 @@ class _ListaRutinasState extends State<ListaRutinas> {
                                                     rutinasMostrar[index]
                                                         .ejercicios[index2]
                                                         .name,
-                                                    style: TextStyle(
+                                                    style: const TextStyle(
                                                         color: Colors.black,
                                                         fontSize: 16,
                                                         fontWeight:
@@ -159,7 +162,7 @@ class _ListaRutinasState extends State<ListaRutinas> {
                                         );
                                       },
                                       separatorBuilder: (context, index) =>
-                                          SizedBox(
+                                          const SizedBox(
                                         width: 3,
                                       ),
                                       itemCount: rutinasMostrar[index]
@@ -175,16 +178,17 @@ class _ListaRutinasState extends State<ListaRutinas> {
                         ),
                       );
                     },
-                    separatorBuilder: (context, index) => SizedBox(
+                    separatorBuilder: (context, index) => const SizedBox(
                           height: 20,
                         ),
                     itemCount: rutinasMostrar.length,
                     scrollDirection: Axis.vertical,
-                    padding: EdgeInsets.only(left: 20, right: 20, bottom: 20)),
+                    padding:
+                        const EdgeInsets.only(left: 20, right: 20, bottom: 20)),
               );
             }
           } else {
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           }
