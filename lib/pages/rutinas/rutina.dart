@@ -1,8 +1,8 @@
 import 'package:acagym_project/data/hive_database.dart';
 import 'package:acagym_project/data/rutina_data.dart';
-import 'package:acagym_project/pages/home/home.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:acagym_project/constants.dart';
 
 class RutinaPage extends StatefulWidget {
   final String nombre;
@@ -28,7 +28,9 @@ class _RutinaPageState extends State<RutinaPage> {
   Widget build(BuildContext context) {
     return Consumer<RutinaData>(
         builder: (context, value, child) => Scaffold(
+            backgroundColor: kGreenLight1,
             appBar: AppBar(
+              backgroundColor: kGreenLight2,
               centerTitle: true,
               title: Text(widget.nombre),
               actions: (widget.flag)
@@ -84,140 +86,52 @@ class _RutinaPageState extends State<RutinaPage> {
                     ],
             ),
             body: Container(
-              child: Container(
-                padding: const EdgeInsets.only(left: 10, right: 10, bottom: 20),
-                child: ListView.separated(
+              padding: const EdgeInsets.only(left: 10, right: 10, bottom: 20),
+              child: ListView.separated(
                   itemCount: value.getEjerciciosCount(widget.idRutina),
                   separatorBuilder: (context, index) => const SizedBox(
-                    height: 20,
-                  ),
-                  itemBuilder: (context, index) => Container(
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[50],
-                        borderRadius: BorderRadius.circular(50),
-                        border: Border.all(
-                          color: Colors.black.withOpacity(0.4),
-                        ),
+                        height: 20,
                       ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          const SizedBox(
-                            height: 15,
+                  itemBuilder: (context, index) {
+                    return Container(
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: kGreenLight3,
+                          borderRadius: BorderRadius.circular(50),
+                          border: Border.all(
+                            color: Colors.black.withOpacity(0.4),
                           ),
-                          Text(
-                            value
-                                .getRutinaById(widget.idRutina)
-                                .ejercicios[index]
-                                .name,
-                            style: const TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Container(
-                                    child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    Container(
-                                      padding: const EdgeInsets.all(10),
-                                      decoration: BoxDecoration(
-                                        color: Colors.grey[100],
-                                        borderRadius: BorderRadius.circular(20),
-                                        border: Border.all(
-                                          color: Colors.black.withOpacity(0.2),
-                                        ),
-                                      ),
-                                      child: Text(
-                                        'Series: ${value.getRutinaById(widget.idRutina).ejercicios[index].series}',
-                                        style: const TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w400),
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    Container(
-                                      padding: const EdgeInsets.all(10),
-                                      decoration: BoxDecoration(
-                                        color: Colors.grey[100],
-                                        borderRadius: BorderRadius.circular(20),
-                                        border: Border.all(
-                                          color: Colors.black.withOpacity(0.2),
-                                        ),
-                                      ),
-                                      child: Text(
-                                        'Repeticiones: ${value.getRutinaById(widget.idRutina).ejercicios[index].repeticiones}',
-                                        style: const TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w400),
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    Container(
-                                      padding: const EdgeInsets.all(10),
-                                      decoration: BoxDecoration(
-                                        color: Colors.grey[100],
-                                        borderRadius: BorderRadius.circular(20),
-                                        border: Border.all(
-                                          color: Colors.black.withOpacity(0.2),
-                                        ),
-                                      ),
-                                      child: (value
-                                                  .getRutinaById(
-                                                      widget.idRutina)
-                                                  .ejercicios[index]
-                                                  .peso !=
-                                              null)
-                                          ? Text(
-                                              'Peso: ${value.getRutinaById(widget.idRutina).ejercicios[index].peso}Kg',
-                                              style: const TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w400),
-                                            )
-                                          : const SizedBox(
-                                              width: 10,
-                                            ),
-                                    ),
-                                  ],
-                                ))
-                              ]),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          const Text('Músculos',
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.bold)),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Container(
-                              alignment: Alignment.center,
-                              height: 50,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            const SizedBox(
+                              height: 15,
+                            ),
+                            Text(
+                              value
+                                  .getRutinaById(widget.idRutina)
+                                  .ejercicios[index]
+                                  .name,
+                              style: const TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
                                 children: [
-                                  ListView.separated(
-                                    scrollDirection: Axis.horizontal,
-                                    shrinkWrap: true,
-                                    itemBuilder: (context, index2) {
-                                      return Container(
-                                        padding: const EdgeInsets.only(
-                                            top: 15, left: 10, right: 10),
+                                  Container(
+                                      child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Container(
+                                        padding: const EdgeInsets.all(10),
                                         decoration: BoxDecoration(
-                                          color: Colors.grey[100],
+                                          color: kGreenLight2,
                                           borderRadius:
                                               BorderRadius.circular(20),
                                           border: Border.all(
@@ -226,92 +140,94 @@ class _RutinaPageState extends State<RutinaPage> {
                                           ),
                                         ),
                                         child: Text(
-                                          value
-                                              .getRutinaById(widget.idRutina)
-                                              .ejercicios[index]
-                                              .musculos[index2],
+                                          'Series: ${value.getRutinaById(widget.idRutina).ejercicios[index].series}',
                                           style: const TextStyle(
                                               color: Colors.black,
                                               fontSize: 14,
                                               fontWeight: FontWeight.w400),
                                         ),
-                                      );
-                                    },
-                                    separatorBuilder: (context, index) =>
-                                        const SizedBox(
-                                      width: 10,
-                                    ),
-                                    itemCount: value
-                                        .getRutinaById(widget.idRutina)
-                                        .ejercicios[index]
-                                        .musculos
-                                        .length,
-                                  ),
-                                ],
-                              )),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          (value
-                                      .getRutinaById(widget.idRutina)
-                                      .ejercicios[index]
-                                      .maquina !=
-                                  null)
-                              ? const Text('Máquina',
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold))
-                              : const SizedBox(
-                                  width: 10,
-                                ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          (value
-                                      .getRutinaById(widget.idRutina)
-                                      .ejercicios[index]
-                                      .maquina !=
-                                  null)
-                              ? Container(
-                                  alignment: Alignment.center,
-                                  child: Column(
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Container(
-                                            padding: const EdgeInsets.all(10),
-                                            decoration: BoxDecoration(
-                                              color: Colors.grey[100],
-                                              borderRadius:
-                                                  BorderRadius.circular(20),
-                                              border: Border.all(
-                                                color: Colors.black
-                                                    .withOpacity(0.2),
-                                              ),
-                                            ),
-                                            child: Text(
-                                              value
-                                                  .getRutinaById(
-                                                      widget.idRutina)
-                                                  .ejercicios[index]
-                                                  .maquina!
-                                                  .name,
-                                              style: const TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w400),
-                                            ),
-                                          ),
-                                        ],
                                       ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Container(
-                                          width: 200,
-                                          height: 200,
+                                      const SizedBox(
+                                        width: 10,
+                                      ),
+                                      Container(
+                                        padding: const EdgeInsets.all(10),
+                                        decoration: BoxDecoration(
+                                          color: kGreenLight2,
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                          border: Border.all(
+                                            color:
+                                                Colors.black.withOpacity(0.2),
+                                          ),
+                                        ),
+                                        child: Text(
+                                          'Repeticiones: ${value.getRutinaById(widget.idRutina).ejercicios[index].repeticiones}',
+                                          style: const TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w400),
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        width: 10,
+                                      ),
+                                      Container(
+                                        padding: const EdgeInsets.all(10),
+                                        decoration: BoxDecoration(
+                                          color: kGreenLight2,
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                          border: Border.all(
+                                            color:
+                                                Colors.black.withOpacity(0.2),
+                                          ),
+                                        ),
+                                        child: (value
+                                                    .getRutinaById(
+                                                        widget.idRutina)
+                                                    .ejercicios[index]
+                                                    .peso !=
+                                                null)
+                                            ? Text(
+                                                'Peso: ${value.getRutinaById(widget.idRutina).ejercicios[index].peso}Kg',
+                                                style: const TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 14,
+                                                    fontWeight:
+                                                        FontWeight.w400),
+                                              )
+                                            : const SizedBox(
+                                                width: 10,
+                                              ),
+                                      ),
+                                    ],
+                                  ))
+                                ]),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            const Text('Músculos',
+                                style: TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.bold)),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Container(
+                                alignment: Alignment.center,
+                                height: 50,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    ListView.separated(
+                                      scrollDirection: Axis.horizontal,
+                                      shrinkWrap: true,
+                                      itemBuilder: (context, index2) {
+                                        return Container(
+                                          padding: const EdgeInsets.only(
+                                              top: 15, left: 10, right: 10),
                                           decoration: BoxDecoration(
+                                            color: kGreenLight2,
                                             borderRadius:
                                                 BorderRadius.circular(20),
                                             border: Border.all(
@@ -319,26 +235,133 @@ class _RutinaPageState extends State<RutinaPage> {
                                                   Colors.black.withOpacity(0.2),
                                             ),
                                           ),
-                                          child: Image(
-                                            image: AssetImage(value
+                                          child: Text(
+                                            value
                                                 .getRutinaById(widget.idRutina)
                                                 .ejercicios[index]
-                                                .maquina!
-                                                .image),
-                                            width: 200,
+                                                .musculos[index2],
+                                            style: const TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w400),
+                                          ),
+                                        );
+                                      },
+                                      separatorBuilder: (context, index) =>
+                                          const SizedBox(
+                                        width: 10,
+                                      ),
+                                      itemCount: value
+                                          .getRutinaById(widget.idRutina)
+                                          .ejercicios[index]
+                                          .musculos
+                                          .length,
+                                    ),
+                                  ],
+                                )),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            (value
+                                        .getRutinaById(widget.idRutina)
+                                        .ejercicios[index]
+                                        .maquina !=
+                                    null)
+                                ? const Text('Máquina',
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold))
+                                : const SizedBox(
+                                    width: 10,
+                                  ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            (value
+                                        .getRutinaById(widget.idRutina)
+                                        .ejercicios[index]
+                                        .maquina !=
+                                    null)
+                                ? Container(
+                                    alignment: Alignment.center,
+                                    child: Column(
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Container(
+                                              padding: const EdgeInsets.all(10),
+                                              decoration: BoxDecoration(
+                                                color: kGreenLight2,
+                                                borderRadius:
+                                                    BorderRadius.circular(20),
+                                                border: Border.all(
+                                                  color: Colors.black
+                                                      .withOpacity(0.2),
+                                                ),
+                                              ),
+                                              child: Text(
+                                                value
+                                                    .getRutinaById(
+                                                        widget.idRutina)
+                                                    .ejercicios[index]
+                                                    .maquina!
+                                                    .name,
+                                                style: const TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 14,
+                                                    fontWeight:
+                                                        FontWeight.w400),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Container(
                                             height: 200,
+                                            width: 200,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(20),
+                                              color: Colors.black,
+                                              border: Border.all(
+                                                color: Colors.white
+                                                    .withOpacity(0.2),
+                                              ),
+                                            ),
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(20),
+                                              child: Image.network(
+                                                  value
+                                                      .getRutinaById(
+                                                          widget.idRutina)
+                                                      .ejercicios[index]
+                                                      .maquina!
+                                                      .image,
+                                                  fit: BoxFit.cover,
+                                                  loadingBuilder: (context,
+                                                      child, progress) {
+                                                return progress == null
+                                                    ? child
+                                                    : const Center(
+                                                        child:
+                                                            CircularProgressIndicator(),
+                                                      );
+                                              }),
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    ],
-                                  ))
-                              : const SizedBox(
-                                  width: 10,
-                                ),
-                        ],
-                      )),
-                ),
-              ),
+                                      ],
+                                    ))
+                                : const SizedBox(
+                                    width: 10,
+                                  ),
+                          ],
+                        ));
+                  }),
             )));
   }
 }

@@ -3,30 +3,29 @@ import 'package:acagym_project/models/rutinas_model.dart';
 import 'package:hive/hive.dart';
 
 class HiveDatabase extends ChangeNotifier {
-  List<RutinasModel>? rutinasListHive = [];
-  Box? boxDB;
+  List<RutinasModel>? _rutinasListHive = [];
+  Box? boxDB = Hive.box<RutinasModel>('rutinas');
 
   HiveDatabase() {
     getRutinas();
   }
 
   void getRutinas() async {
-    boxDB = await Hive.openBox('rutinas');
-    rutinasListHive = boxDB?.values.toList().cast<RutinasModel>();
+    _rutinasListHive = boxDB?.values.toList().cast<RutinasModel>();
     notifyListeners();
   }
 
-  List<RutinasModel> get rutinas => rutinasListHive!;
+  List<RutinasModel> get rutinas => _rutinasListHive!;
 
   void addRutina(RutinasModel rutina) async {
     await boxDB?.add(rutina);
-    rutinasListHive = boxDB?.values.toList().cast<RutinasModel>();
+    _rutinasListHive = boxDB?.values.toList().cast<RutinasModel>();
     notifyListeners();
   }
 
   void deleteRutina(int index) async {
     await boxDB?.deleteAt(index);
-    rutinasListHive = boxDB?.values.toList().cast<RutinasModel>();
+    _rutinasListHive = boxDB?.values.toList().cast<RutinasModel>();
     notifyListeners();
   }
 

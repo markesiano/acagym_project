@@ -7,7 +7,7 @@
     
 
     <application
-        android:label="ACAGYM"
+        android:label="APP COACH"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
         <activity

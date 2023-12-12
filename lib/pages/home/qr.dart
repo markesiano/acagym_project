@@ -3,6 +3,7 @@ import 'package:acagym_project/pages/rutinas/rutinasQr.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:provider/provider.dart';
+import 'package:acagym_project/constants.dart';
 
 class QrPage extends StatefulWidget {
   const QrPage({super.key});
@@ -17,17 +18,21 @@ class _QrPageState extends State<QrPage> {
   @override
   Widget build(BuildContext context) {
     _isScanning = context.watch<QrModel>().isScanning;
-    print(
-        'Este es el valor de isScanning en la pantalla de QR: ${context.watch<QrModel>().isScanning}');
+    MobileScannerController controller = MobileScannerController(
+      detectionSpeed: DetectionSpeed.noDuplicates,
+      facing: CameraFacing.back,
+      torchEnabled: false,
+    );
+
     return Container(
-      color: Colors.white,
+      color: kGreenLight1,
       width: double.infinity,
       padding: const EdgeInsets.all(16),
       child: Column(
         children: [
           Expanded(
               child: Container(
-            color: Colors.white,
+            color: kGreenLight1,
             child: const Column(
               children: [
                 Text(
@@ -58,11 +63,7 @@ class _QrPageState extends State<QrPage> {
                   ),
                 ),
                 child: MobileScanner(
-                  controller: MobileScannerController(
-                    detectionSpeed: DetectionSpeed.noDuplicates,
-                    facing: CameraFacing.back,
-                    torchEnabled: false,
-                  ),
+                  controller: controller,
                   onDetect: (capture) {
                     final List<Barcode> barcodes = capture.barcodes;
                     final code = barcodes[0].rawValue.toString();
@@ -88,6 +89,9 @@ class _QrPageState extends State<QrPage> {
                       );
                     } else if (!_isScanning) {
                       context.read<QrModel>().isScanning = true;
+                      //Detenemos el escaneo de la cámara con el método stop()
+                      controller.stop();
+
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -95,6 +99,7 @@ class _QrPageState extends State<QrPage> {
                             canPop: true,
                             onPopInvoked: (bool didPop) {
                               if (didPop) {
+                                controller.start();
                                 MaterialPageRoute(
                                   builder: (context) => const QrPage(),
                                 );

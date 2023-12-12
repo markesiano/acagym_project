@@ -38,7 +38,7 @@ dependencies:
   flutter_svg: ^2.0.9
   firebase_core: ^2.22.0
   loading_overlay: ^0.3.0
-  firebase_auth: ^4.15.0
+  firebase_auth: ^4.15.2
   rflutter_alert: ^2.0.7
   google_nav_bar: ^5.0.6
   provider:
@@ -46,13 +46,20 @@ dependencies:
   hive_flutter: ^1.1.0
   cloud_firestore: ^4.13.3
   mobile_scanner: ^3.5.5
-  qr_flutter: ^4.1.0
+  pretty_qr_code: ^3.0.0
   url_launcher: ^6.2.1
   fast_contacts: ^3.1.2
   permission_handler: ^11.1.0
   flutter_map: ^6.1.0
   latlong2: ^0.9.0
   geolocator: ^10.1.0
+  flutter_native_splash: ^2.3.8
+  get_storage:
+  get: ^4.6.6
+  google_sign_in: ^6.2.0
+  screenshot: ^2.1.0
+
+
 
 dev_dependencies:
   flutter_test:

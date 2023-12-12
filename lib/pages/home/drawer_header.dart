@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:acagym_project/constants.dart';
 
 class MyHeader extends StatefulWidget {
   @override
@@ -12,7 +13,9 @@ class _MyHeader extends State<MyHeader> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.grey[200],
+      decoration: const BoxDecoration(
+        color: kGreenLight2,
+      ),
       width: double.infinity,
       padding: const EdgeInsets.only(top: 20),
       child: Column(

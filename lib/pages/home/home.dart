@@ -12,6 +12,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
+import 'package:acagym_project/constants.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -46,7 +47,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final List<Widget> _pages = [
       const RutinasPage(),
-      QrPage(),
+      const QrPage(),
       MapaPage(
         onPositionChanged: updatePosition,
       ),
@@ -54,29 +55,27 @@ class _HomePageState extends State<HomePage> {
     return Consumer<QrModel>(
       builder: (context, value, child) => Scaffold(
         appBar: appBar(),
-        backgroundColor: Colors.white,
+        backgroundColor: kGreenLight1,
         body: _pages[_selectedIndex],
         drawer: Drawer(
           child: SingleChildScrollView(
-            child: Container(
-              child: Column(
-                children: [
-                  MyHeader(),
-                  drawerList(),
-                ],
-              ),
+            child: Column(
+              children: [
+                MyHeader(),
+                drawerList(),
+              ],
             ),
           ),
         ),
         bottomNavigationBar: Container(
-          color: Colors.white,
+          color: kGreenLight2,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
             child: GNav(
-              backgroundColor: Colors.white,
+              backgroundColor: kGreenLight2,
               color: Colors.black,
-              activeColor: Colors.black,
-              tabBackgroundColor: Colors.grey.shade300,
+              activeColor: kGreenLight11,
+              tabBackgroundColor: kGreenLight3,
               padding: const EdgeInsets.all(15),
               gap: 8,
               onTabChange: (index) {
@@ -105,7 +104,7 @@ class _HomePageState extends State<HomePage> {
             color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
       ),
       centerTitle: true,
-      backgroundColor: Colors.white,
+      backgroundColor: kGreenLight2,
       elevation: 0.0,
       actions: [
         GestureDetector(
@@ -162,6 +161,9 @@ class _HomePageState extends State<HomePage> {
   Widget drawerList() {
     return Container(
       padding: const EdgeInsets.only(top: 15),
+      decoration: const BoxDecoration(
+        color: kGreenLight2,
+      ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -191,11 +193,12 @@ class _HomePageState extends State<HomePage> {
           });
         } else if (id == 2) {
           FirebaseAuth.instance.signOut();
+          Navigator.pushReplacementNamed(context, '/auth');
         } else if (id == 3) {
           setState(() {
             currentPage = MenuOption.invitar;
           });
-          Navigator.push(
+          Navigator.pushReplacement(
             context,
             MaterialPageRoute(
               builder: (context) => const Contactos(),
